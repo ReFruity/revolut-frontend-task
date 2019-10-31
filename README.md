@@ -5,11 +5,13 @@
 # 🚀 Building
 
 ```
+npm install
 npm run build
 ```
 
 # ⌨ Development
 
 ```
+npm install
 npm start
 ```
