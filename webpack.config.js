@@ -1,41 +1,41 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-	mode: 'development',
-	entry: './src/index.tsx',
+  entry: "./src/index.tsx",
+  mode: "development",
 
-	output: {
-		filename: 'bundle.min.js',
-		path: path.resolve(__dirname, 'dist')
-	},
+  output: {
+    filename: "bundle.min.js",
+    path: path.resolve(__dirname, "dist"),
+  },
 
-	plugins: [
-		new webpack.ProgressPlugin(),
-		new HtmlWebpackPlugin({
-			title: 'Showcase',
-			template: './public/index.ejs',
-			inject: true
-		})
-	],
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: "./public/index.ejs",
+      title: "Showcase",
+    }),
+  ],
 
-	module: {
-		rules: [
-			{
-				test: /.(ts|tsx)?$/,
-				loader: 'ts-loader',
-				include: [path.resolve(__dirname, 'src')],
-				exclude: /node_modules/
-			},
-			{ test: /\.ejs$/, loader: 'ejs-loader' }
-		]
-	},
+  module: {
+    rules: [
+      {
+        exclude: /node_modules/,
+        include: [path.resolve(__dirname, "src")],
+        loader: "ts-loader",
+        test: /.(ts|tsx)?$/,
+      },
+      { test: /\.ejs$/, loader: "ejs-loader" },
+    ],
+  },
 
-	resolve: {
-		extensions: ['.ts', '.tsx', '.js'],
-		alias: {
-			src: path.resolve(__dirname, 'src')
-		}
-	}
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, "src"),
+    },
+    extensions: [".ts", ".tsx", ".js"],
+  },
 };
