@@ -14,9 +14,12 @@ module.exports = {
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
+      favicon: "./public/assets/img/revolut-favicon.png",
       inject: true,
       template: "./public/index.ejs",
-      title: "Showcase",
+      templateParameters: {
+        title: "Revolut frontend task",
+      },
     }),
   ],
 
