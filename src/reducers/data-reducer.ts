@@ -1,5 +1,4 @@
-import { ExchangeRates } from 'src/types/data-types'
-import { DataState, FETCH_DATA_ERROR, FETCH_DATA_SUCCESS, FetchDataTypes } from 'src/types/data-types'
+import { DataState, ExchangeRates, FETCH_DATA_ERROR, FETCH_DATA_SUCCESS, FetchDataTypes } from 'src/types/data-types'
 
 export const initialState: DataState = {
   exchangeRates: {

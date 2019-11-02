@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore, Store } from 'redux'
+import { applyMiddleware, compose, createStore, Store } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import dataReducer, { initialState } from './reducers/data-reducer'
 import dataSaga from './sagas/data-saga'

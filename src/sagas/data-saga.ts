@@ -3,7 +3,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import { fetchDataError, fetchDataSuccess } from 'src/actions/data-actions'
 import config from 'src/config'
 import { FETCH_DATA_REQUEST } from 'src/types/data-types'
-import { ExchangeRates } from '../types/data-types'
+import { ExchangeRates } from 'src/types/data-types'
 
 function* fetchData() {
   try {
@@ -14,6 +14,8 @@ function* fetchData() {
     const exchangeRates: ExchangeRates = JSON.parse(text)
     yield put(fetchDataSuccess(exchangeRates))
   } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error)
     yield put(fetchDataError(error.message))
   }
 

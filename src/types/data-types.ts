@@ -20,7 +20,7 @@ export type FetchDataTypes = FetchDataSuccessAction | FetchDataErrorAction
 
 export interface ExchangeRates {
   base: string
-  rates: { [currency: string]: string }
+  rates: { [currency: string]: number }
 }
 
 export interface DataState {
