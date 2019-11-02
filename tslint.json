@@ -3,6 +3,8 @@
   "rules": {
     "semicolon": [true, "never"],
     "quotemark": [true, "single"],
-    "member-access": false
+    "member-access": false,
+    "interface-name": [true, "never-prefix"],
+    "object-literal-sort-keys": false
   }
 }
