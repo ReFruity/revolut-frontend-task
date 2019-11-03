@@ -17,12 +17,13 @@ export default function walletReducer(
       const nextAmountFrom = (state.walletAmounts[currencyFrom] || 0) - amountFrom
       const nextAmountTo = (state.walletAmounts[currencyTo] || 0) + amountTo
 
-      if (nextAmountFrom < 0) {
+      if (nextAmountFrom < 0 || nextAmountTo < 0) {
         return state
       }
 
       return {
         walletAmounts: {
+          ...state.walletAmounts,
           [currencyFrom]: nextAmountFrom,
           [currencyTo]: nextAmountTo,
         },

@@ -11,6 +11,12 @@ import { DataState, ExchangeRates } from 'src/types/data-types'
 import { StoreState } from 'src/types/store-types'
 import { WalletAmounts } from 'src/types/wallet-types'
 
+const CURRENCIES = [
+  Currency.USD,
+  Currency.EUR,
+  Currency.GBP,
+]
+
 interface Props {
   exchangeRates: ExchangeRates
   walletAmounts: WalletAmounts
@@ -39,20 +45,18 @@ class App extends React.Component<Props, State> {
 
   @boundMethod
   onCurrencyFromChange(event: ChangeEvent<HTMLInputElement>): void {
-    const { exchangeRates } = this.props
     const amountFrom = parseInt(event.target.value, 10)
-    this.setState({ amountFrom, amountTo: amountFrom * exchangeRates.rates[Currency.EUR] })
+    this.setState({ amountFrom, amountTo: amountFrom * this.getExchangeRate() })
   }
 
   @boundMethod
   onCurrencyToChange(event: ChangeEvent<HTMLInputElement>): void {
-    const { exchangeRates } = this.props
     const amountTo = parseInt(event.target.value, 10)
-    this.setState({ amountTo, amountFrom: amountTo * exchangeRates.rates[Currency.EUR] })
+    this.setState({ amountTo, amountFrom: amountTo * this.getExchangeRate() })
   }
 
   @boundMethod
-  onExchangeClick() {
+  onExchangeClick(): void {
     const { currencyFrom, currencyTo, amountFrom, amountTo } = this.state
 
     this.props.dispatch(exchangeCurrencies({
@@ -63,14 +67,65 @@ class App extends React.Component<Props, State> {
     }))
   }
 
+  @boundMethod
+  previousCurrencyFrom(): void {
+    const { currencyFrom } = this.state
+    const index = CURRENCIES.indexOf(currencyFrom)
+    this.setState({
+      currencyFrom: CURRENCIES[(CURRENCIES.length + index - 1) % CURRENCIES.length],
+    })
+  }
+
+  @boundMethod
+  nextCurrencyFrom(): void {
+    const { currencyFrom } = this.state
+    const index = CURRENCIES.indexOf(currencyFrom)
+    this.setState({
+      currencyFrom: CURRENCIES[(index + 1) % CURRENCIES.length],
+    })
+  }
+
+  @boundMethod
+  previousCurrencyTo(): void {
+    const { currencyTo } = this.state
+    const index = CURRENCIES.indexOf(currencyTo)
+    this.setState({
+      currencyTo: CURRENCIES[(CURRENCIES.length + index - 1) % CURRENCIES.length],
+    })
+  }
+
+  @boundMethod
+  nextCurrencyTo(): void {
+    const { currencyTo } = this.state
+    const index = CURRENCIES.indexOf(currencyTo)
+    this.setState({
+      currencyTo: CURRENCIES[(index + 1) % CURRENCIES.length],
+    })
+  }
+
+  @boundMethod
+  getExchangeRate(): number {
+    const { exchangeRates } = this.props
+    const { currencyTo, currencyFrom } = this.state
+    return exchangeRates.rates[currencyTo] / exchangeRates.rates[currencyFrom]
+  }
+
   render(): React.ReactNode {
-    const { exchangeRates, walletAmounts } = this.props
+    const { walletAmounts } = this.props
     const { currencyFrom, currencyTo, amountFrom, amountTo } = this.state
+    const exchangeRate = this.getExchangeRate()
 
     return (
       <div>
-        <div>{ `1${Symbols[currencyFrom]} = ${exchangeRates.rates[currencyTo]}${Symbols[currencyTo]}` }</div>
-        <div>{ `${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }</div>
+        {
+          !Number.isNaN(exchangeRate) &&
+          <div>{ `1${Symbols[currencyFrom]} = ${this.getExchangeRate()}${Symbols[currencyTo]}` }</div>
+        }
+        <div>{ `From ${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }</div>
+        <div>
+          <button onClick={this.previousCurrencyFrom}>&lt;</button>
+          <button onClick={this.nextCurrencyFrom}>&gt;</button>
+        </div>
         <div>
           <input
             type='number'
@@ -79,7 +134,11 @@ class App extends React.Component<Props, State> {
             value={amountFrom}
           />
         </div>
-        <div>{ `${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }</div>
+        <div>{ `To ${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }</div>
+        <div>
+          <button onClick={this.previousCurrencyTo}>&lt;</button>
+          <button onClick={this.nextCurrencyTo}>&gt;</button>
+        </div>
         <div>
           <input
             type='number'
@@ -90,7 +149,7 @@ class App extends React.Component<Props, State> {
         </div>
         <div>
           <button
-            disabled={currencyTo === currencyFrom}
+            disabled={Number.isNaN(exchangeRate) || currencyTo === currencyFrom}
             onClick={this.onExchangeClick}
           >
             Exchange
