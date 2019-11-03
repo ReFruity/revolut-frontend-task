@@ -4,11 +4,16 @@ import { ChangeEvent } from 'react'
 import { connect } from 'react-redux'
 import { Action } from 'redux'
 import { fetchDataRequest } from 'src/actions/data-actions'
+import { exchangeCurrencies } from 'src/actions/wallet-actions'
 import { Currency } from 'src/constants/currency-constants'
+import { Symbols } from 'src/constants/currency-constants'
 import { DataState, ExchangeRates } from 'src/types/data-types'
+import { StoreState } from 'src/types/store-types'
+import { WalletAmounts } from 'src/types/wallet-types'
 
 interface Props {
   exchangeRates: ExchangeRates
+  walletAmounts: WalletAmounts
   dispatch: (action: Action) => void
 }
 
@@ -28,6 +33,7 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount(): void {
+    // TODO: Poll once in 10 seconds
     this.props.dispatch(fetchDataRequest())
   }
 
@@ -45,14 +51,26 @@ class App extends React.Component<Props, State> {
     this.setState({ amountTo, amountFrom: amountTo * exchangeRates.rates[Currency.EUR] })
   }
 
+  @boundMethod
+  onExchangeClick() {
+    const { currencyFrom, currencyTo, amountFrom, amountTo } = this.state
+
+    this.props.dispatch(exchangeCurrencies({
+      currencyFrom,
+      currencyTo,
+      amountFrom,
+      amountTo,
+    }))
+  }
+
   render(): React.ReactNode {
-    const { exchangeRates } = this.props
+    const { exchangeRates, walletAmounts } = this.props
     const { currencyFrom, currencyTo, amountFrom, amountTo } = this.state
 
     return (
       <div>
-        <div>{ exchangeRates.rates[currencyTo] }</div>
-        <div>{ currencyFrom }</div>
+        <div>{ `1${Symbols[currencyFrom]} = ${exchangeRates.rates[currencyTo]}${Symbols[currencyTo]}` }</div>
+        <div>{ `${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }</div>
         <div>
           <input
             type='number'
@@ -61,7 +79,7 @@ class App extends React.Component<Props, State> {
             value={amountFrom}
           />
         </div>
-        <div>{ currencyTo }</div>
+        <div>{ `${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }</div>
         <div>
           <input
             type='number'
@@ -70,15 +88,23 @@ class App extends React.Component<Props, State> {
             value={amountTo}
           />
         </div>
-        <div>{ (amountFrom * exchangeRates.rates[Currency.EUR]).toString() }</div>
+        <div>
+          <button
+            disabled={currencyTo === currencyFrom}
+            onClick={this.onExchangeClick}
+          >
+            Exchange
+          </button>
+        </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = (state: DataState) => {
+const mapStateToProps = (state: StoreState) => {
   return {
-    exchangeRates: state.exchangeRates,
+    exchangeRates: state.dataReducer.exchangeRates,
+    walletAmounts: state.walletReducer.walletAmounts,
   }
 }
 

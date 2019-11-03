@@ -7,12 +7,12 @@ export interface FetchDataRequestAction {
 }
 
 export interface FetchDataSuccessAction {
-  type: typeof FETCH_DATA_SUCCESS,
+  type: typeof FETCH_DATA_SUCCESS
   payload: ExchangeRates
 }
 
 export interface FetchDataErrorAction {
-  type: typeof FETCH_DATA_ERROR,
+  type: typeof FETCH_DATA_ERROR
   message: string
 }
 
