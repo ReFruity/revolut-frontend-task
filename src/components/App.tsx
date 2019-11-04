@@ -1,3 +1,4 @@
+import { Button, Input } from 'antd'
 import { boundMethod } from 'autobind-decorator'
 import * as React from 'react'
 import { ChangeEvent } from 'react'
@@ -117,31 +118,37 @@ class App extends React.Component<Props, State> {
     const exchangeRate = this.getExchangeRate()
 
     return (
-      <div>
+      <div className='root'>
         {
           !Number.isNaN(exchangeRate) &&
-          <div>{ `1${Symbols[currencyFrom]} = ${this.getExchangeRate()}${Symbols[currencyTo]}` }</div>
+          <div className='exchangeRate'>
+            { `1${Symbols[currencyFrom]} = ${this.getExchangeRate()}${Symbols[currencyTo]}` }
+          </div>
         }
-        <div>{ `From ${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }</div>
-        <div>
-          <button onClick={this.previousCurrencyFrom}>&lt;</button>
-          <button onClick={this.nextCurrencyFrom}>&gt;</button>
+        <div className='from'>
+          <Button onClick={this.previousCurrencyFrom}>&lt;</Button>
+          <div className='fromText'>
+            { `From ${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }
+          </div>
+          <Button onClick={this.nextCurrencyFrom}>&gt;</Button>
         </div>
-        <div>
-          <input
+        <div className='inputWrap'>
+          <Input
             type='number'
             name='currencyFrom'
             onChange={this.onCurrencyFromChange}
             value={amountFrom}
           />
         </div>
-        <div>{ `To ${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }</div>
-        <div>
-          <button onClick={this.previousCurrencyTo}>&lt;</button>
-          <button onClick={this.nextCurrencyTo}>&gt;</button>
+        <div className='to'>
+          <Button onClick={this.previousCurrencyTo}>&lt;</Button>
+          <div className='fromText'>
+            { `To ${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }
+          </div>
+          <Button onClick={this.nextCurrencyTo}>&gt;</Button>
         </div>
-        <div>
-          <input
+        <div className='inputWrap'>
+          <Input
             type='number'
             name='currencyTo'
             onChange={this.onCurrencyToChange}
@@ -149,12 +156,14 @@ class App extends React.Component<Props, State> {
           />
         </div>
         <div>
-          <button
+          <Button
+            type='primary'
             disabled={Number.isNaN(exchangeRate) || currencyTo === currencyFrom}
             onClick={this.onExchangeClick}
           >
             Exchange
-          </button>
+          </Button>
+
         </div>
       </div>
     )

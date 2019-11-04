@@ -39,6 +39,13 @@ module.exports = {
           "stylus-loader",
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader",
+        ],
+      },
       { test: /\.ejs$/, loader: "ejs-loader" },
     ],
   },
@@ -47,6 +54,6 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, "src"),
     },
-    extensions: [".ts", ".tsx", ".js", ".styl"],
+    extensions: [".ts", ".tsx", ".js", ".styl", ".css"],
   },
 };

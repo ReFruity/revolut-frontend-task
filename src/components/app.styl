@@ -1,6 +1,20 @@
-button
-  color white
-  background-color #1890ff
-  border-color #1890ff
-  border-radius 4px
-  cursor pointer
+.root
+  text-align center
+  > *
+    &:not(:last-child)
+      margin-bottom 10px
+
+.exchangeRate
+  font-size 30px
+
+.from > *, .to > *
+  display inline-block
+  &:not(:last-child)
+    margin-right 10px
+
+.fromText
+  width 400px
+
+.inputWrap
+  width 500px
+  display inline-block
