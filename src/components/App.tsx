@@ -200,7 +200,7 @@ class App extends React.Component<Props, State> {
         <div className='from'>
           <Button onClick={this.previousCurrencyFrom}>&lt;</Button>
           <div className='fromText'>
-            { `From ${currencyFrom} (You have ${Symbols[currencyFrom]}${walletAmounts[currencyFrom] || 0})` }
+            { `From ${currencyFrom} (You have ${Symbols[currencyFrom]}${roundToTwoDigits(walletAmounts[currencyFrom] || 0)})` }
           </div>
           <Button onClick={this.nextCurrencyFrom}>&gt;</Button>
         </div>
@@ -215,7 +215,7 @@ class App extends React.Component<Props, State> {
         <div className='to'>
           <Button onClick={this.previousCurrencyTo}>&lt;</Button>
           <div className='fromText'>
-            { `To ${currencyTo} (You have ${Symbols[currencyTo]}${walletAmounts[currencyTo] || 0})` }
+            { `To ${currencyTo} (You have ${Symbols[currencyTo]}${roundToTwoDigits(walletAmounts[currencyTo] || 0)})` }
           </div>
           <Button onClick={this.nextCurrencyTo}>&gt;</Button>
         </div>
