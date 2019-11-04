@@ -47,6 +47,10 @@ function roundToTwoDigits(x: number): number {
   return Math.round(x * 100) / 100
 }
 
+function roundToFourDigits(x: number): number {
+  return Math.round(x * 10000) / 10000
+}
+
 class App extends React.Component<Props, State> {
   state: State = defaultState
 
@@ -74,7 +78,8 @@ class App extends React.Component<Props, State> {
     }
 
     if (value.match(/^-?\d+\.$/) ||
-        value.match(/^-$/)) {
+        value.match(/^-$/) ||
+        value.match(/^-?\d+\.0$/)) {
       this.setState({ inputAmountFrom: value })
       return
     }
@@ -111,7 +116,8 @@ class App extends React.Component<Props, State> {
     }
 
     if (value.match(/^-?\d+\.$/) ||
-      value.match(/^-$/)) {
+      value.match(/^-$/) ||
+      value.match(/^-?\d+\.0$/)) {
       this.setState({ inputAmountTo: value })
       return
     }
@@ -194,7 +200,7 @@ class App extends React.Component<Props, State> {
         {
           !Number.isNaN(exchangeRate) &&
           <div className='exchangeRate'>
-            { `1${Symbols[currencyFrom]} = ${this.getExchangeRate()}${Symbols[currencyTo]}` }
+            { `1${Symbols[currencyFrom]} = ${roundToFourDigits(this.getExchangeRate())}${Symbols[currencyTo]}` }
           </div>
         }
         <div className='from'>
