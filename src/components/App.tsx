@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Action } from 'redux'
 import { fetchDataRequest } from 'src/actions/data-actions'
 import { exchangeCurrencies } from 'src/actions/wallet-actions'
+import config from 'src/config'
 import { Currency } from 'src/constants/currency-constants'
 import { Symbols } from 'src/constants/currency-constants'
 import { DataState, ExchangeRates } from 'src/types/data-types'
@@ -55,8 +56,8 @@ class App extends React.Component<Props, State> {
   state: State = defaultState
 
   componentDidMount(): void {
-    // TODO: Poll once in 10 seconds
     this.props.dispatch(fetchDataRequest())
+    setInterval(() => this.props.dispatch(fetchDataRequest()), config.pollIntervalInSeconds * 1000)
   }
 
   @boundMethod
