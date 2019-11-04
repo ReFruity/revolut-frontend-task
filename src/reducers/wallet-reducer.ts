@@ -14,7 +14,7 @@ export default function walletReducer(
   switch (action.type) {
     case EXCHANGE_CURRENCIES:
       const { currencyFrom, currencyTo, amountFrom, amountTo } = action.options
-      const nextAmountFrom = (state.walletAmounts[currencyFrom] || 0) - amountFrom
+      const nextAmountFrom = (state.walletAmounts[currencyFrom] || 0) + amountFrom
       const nextAmountTo = (state.walletAmounts[currencyTo] || 0) + amountTo
 
       if (nextAmountFrom < 0 || nextAmountTo < 0) {

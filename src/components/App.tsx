@@ -64,7 +64,9 @@ class App extends React.Component<Props, State> {
   onCurrencyFromChange(event: ChangeEvent<HTMLInputElement>): void {
     const { value } = event.target
 
-    if (!value) {
+    const amountFrom = parseFloat(value)
+
+    if (!value || isNaN(amountFrom)) {
       this.setState({
         amountFrom: defaultState.amountFrom,
         amountTo: defaultState.amountTo,
@@ -85,8 +87,7 @@ class App extends React.Component<Props, State> {
       return
     }
 
-    const amountFrom = parseFloat(value)
-    const amountTo = amountFrom * this.getExchangeRate()
+    const amountTo = -amountFrom * this.getExchangeRate()
     const inputAmountFrom = (roundToTwoDigits(amountFrom)).toString()
     const inputAmountTo = (roundToTwoDigits(amountTo)).toString()
 
@@ -102,7 +103,9 @@ class App extends React.Component<Props, State> {
   onCurrencyToChange(event: ChangeEvent<HTMLInputElement>): void {
     const { value } = event.target
 
-    if (!value) {
+    const amountTo = parseFloat(value)
+
+    if (!value || isNaN(amountTo)) {
       this.setState({
         amountFrom: defaultState.amountFrom,
         amountTo: defaultState.amountTo,
@@ -123,8 +126,7 @@ class App extends React.Component<Props, State> {
       return
     }
 
-    const amountTo = parseFloat(value)
-    const amountFrom = amountTo * this.getExchangeRate()
+    const amountFrom = -amountTo * this.getExchangeRate()
     const inputAmountFrom = (roundToTwoDigits(amountFrom)).toString()
     const inputAmountTo = (roundToTwoDigits(amountTo)).toString()
 
