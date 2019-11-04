@@ -10,6 +10,7 @@ import { Symbols } from 'src/constants/currency-constants'
 import { DataState, ExchangeRates } from 'src/types/data-types'
 import { StoreState } from 'src/types/store-types'
 import { WalletAmounts } from 'src/types/wallet-types'
+import './app.styl'
 
 const CURRENCIES = [
   Currency.USD,

@@ -29,7 +29,15 @@ module.exports = {
         exclude: /node_modules/,
         include: [path.resolve(__dirname, "src")],
         loader: "ts-loader",
-        test: /.(ts|tsx)?$/,
+        test: /\.(ts|tsx)$/,
+      },
+      {
+        test: /\.styl$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "stylus-loader",
+        ],
       },
       { test: /\.ejs$/, loader: "ejs-loader" },
     ],
@@ -39,6 +47,6 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, "src"),
     },
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js", ".styl"],
   },
 };
