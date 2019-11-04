@@ -30,15 +30,25 @@ interface State {
   currencyTo: Currency
   amountFrom: number
   amountTo: number
+  inputAmountFrom: string
+  inputAmountTo: string
+}
+
+const defaultState: State = {
+  currencyFrom: Currency.USD,
+  currencyTo: Currency.EUR,
+  amountFrom: 0,
+  amountTo: 0,
+  inputAmountFrom: '',
+  inputAmountTo: '',
+}
+
+function roundToTwoDigits(x: number): number {
+  return Math.round(x * 100) / 100
 }
 
 class App extends React.Component<Props, State> {
-  state: State = {
-    currencyFrom: Currency.USD,
-    currencyTo: Currency.EUR,
-    amountFrom: 0,
-    amountTo: 0,
-  }
+  state: State = defaultState
 
   componentDidMount(): void {
     // TODO: Poll once in 10 seconds
@@ -47,14 +57,76 @@ class App extends React.Component<Props, State> {
 
   @boundMethod
   onCurrencyFromChange(event: ChangeEvent<HTMLInputElement>): void {
-    const amountFrom = parseInt(event.target.value, 10)
-    this.setState({ amountFrom, amountTo: amountFrom * this.getExchangeRate() })
+    const { value } = event.target
+
+    if (!value) {
+      this.setState({
+        amountFrom: defaultState.amountFrom,
+        amountTo: defaultState.amountTo,
+        inputAmountTo: defaultState.inputAmountTo,
+        inputAmountFrom: defaultState.inputAmountFrom,
+      })
+      return
+    }
+
+    if (value.match(/^-?\d+\.\d{3}/)) {
+      return
+    }
+
+    if (value.match(/^-?\d+\.$/) ||
+        value.match(/^-$/)) {
+      this.setState({ inputAmountFrom: value })
+      return
+    }
+
+    const amountFrom = parseFloat(value)
+    const amountTo = amountFrom * this.getExchangeRate()
+    const inputAmountFrom = (roundToTwoDigits(amountFrom)).toString()
+    const inputAmountTo = (roundToTwoDigits(amountTo)).toString()
+
+    this.setState({
+      amountFrom,
+      amountTo,
+      inputAmountFrom,
+      inputAmountTo,
+    })
   }
 
   @boundMethod
   onCurrencyToChange(event: ChangeEvent<HTMLInputElement>): void {
-    const amountTo = parseInt(event.target.value, 10)
-    this.setState({ amountTo, amountFrom: amountTo * this.getExchangeRate() })
+    const { value } = event.target
+
+    if (!value) {
+      this.setState({
+        amountFrom: defaultState.amountFrom,
+        amountTo: defaultState.amountTo,
+        inputAmountTo: defaultState.inputAmountTo,
+        inputAmountFrom: defaultState.inputAmountFrom,
+      })
+      return
+    }
+
+    if (value.match(/^-?\d+\.\d{3}/)) {
+      return
+    }
+
+    if (value.match(/^-?\d+\.$/) ||
+      value.match(/^-$/)) {
+      this.setState({ inputAmountTo: value })
+      return
+    }
+
+    const amountTo = parseFloat(value)
+    const amountFrom = amountTo * this.getExchangeRate()
+    const inputAmountFrom = (roundToTwoDigits(amountFrom)).toString()
+    const inputAmountTo = (roundToTwoDigits(amountTo)).toString()
+
+    this.setState({
+      amountFrom,
+      amountTo,
+      inputAmountFrom,
+      inputAmountTo,
+    })
   }
 
   @boundMethod
@@ -114,7 +186,7 @@ class App extends React.Component<Props, State> {
 
   render(): React.ReactNode {
     const { walletAmounts } = this.props
-    const { currencyFrom, currencyTo, amountFrom, amountTo } = this.state
+    const { currencyFrom, currencyTo, inputAmountFrom, inputAmountTo } = this.state
     const exchangeRate = this.getExchangeRate()
 
     return (
@@ -134,10 +206,10 @@ class App extends React.Component<Props, State> {
         </div>
         <div className='inputWrap'>
           <Input
-            type='number'
+            type='string'
             name='currencyFrom'
             onChange={this.onCurrencyFromChange}
-            value={amountFrom}
+            value={inputAmountFrom}
           />
         </div>
         <div className='to'>
@@ -149,10 +221,10 @@ class App extends React.Component<Props, State> {
         </div>
         <div className='inputWrap'>
           <Input
-            type='number'
+            type='string'
             name='currencyTo'
             onChange={this.onCurrencyToChange}
-            value={amountTo}
+            value={inputAmountTo}
           />
         </div>
         <div>

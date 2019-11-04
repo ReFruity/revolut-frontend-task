@@ -1,5 +1,7 @@
 .root
   text-align center
+  padding 10px
+  background-color aliceblue
   > *
     &:not(:last-child)
       margin-bottom 10px
@@ -18,3 +20,9 @@
 .inputWrap
   width 500px
   display inline-block
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
